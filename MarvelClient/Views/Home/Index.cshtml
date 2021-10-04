@@ -1,6 +1,42 @@
 ﻿@using System.Globalization
 @inject IStringLocalizer<Resource> Loc
 
-<div class="text-center">
-    <h1 class="display-4">@Loc["LABEL_WELCOME"]</h1>
+@model MarvelClient.Models.Hero
+
+<div class="content">
+
+    <div class="form">
+        <h1>@Loc["LABEL_WELCOME"]</h1>
+
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+        {
+            <strong>@Loc["LABEL_HERO_ID"] </strong> <input type="number" name="heroId" /><br />
+            <input id="Submit" type="submit" value="@Loc["SEND_QUERY"]" class="btn btn-primary btn-large" />
+        }
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <p class="error-message">@ViewBag.ErrorMessage</p>
+        }
+
+        @if (Model?.Data != null)
+        {
+            var item = Model.Data.Results.FirstOrDefault();
+            <table>
+                <tr>
+                    <td><strong>@Loc["LABEL_NAME"]:</strong></td>
+                    <td>@item.Name</td>
+                </tr>
+                <tr>
+                    <td><strong>@Loc["LABEL_DESCRIPTION"]:</strong></td>
+                    <td>@item.Description</td>
+                </tr>
+                <tr>
+                    <td><strong>@Loc["LABEL_COMICS_COUNT"]:</strong></td>
+                    <td>@item.Comics.Items.Count</td>
+                </tr>
+            </table>
+        }
+    </div>
+
 </div>

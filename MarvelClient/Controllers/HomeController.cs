@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MarvelClient.Models;
+using MarvelClient.Service;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,15 +14,33 @@ namespace MarvelClient.Controllers
     public class HomeController : Controller
     {
         private readonly IStringLocalizer _stringLocalizer;
+        private readonly IMarvelService _marvelService;
 
-        public HomeController(IStringLocalizer<HomeController> stringLocalizer)
+        public HomeController(IStringLocalizer<HomeController> stringLocalizer, IMarvelService marvelService)
         {
             _stringLocalizer = stringLocalizer;
+            _marvelService = marvelService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string heroId)
         {
-            return View();
+            try
+            {
+                if (string.IsNullOrEmpty(heroId))
+                    return View();
+
+                if (!int.TryParse(heroId, out _))
+                    throw new Exception(_stringLocalizer["HERO_ID_INVALID"]);
+                    
+
+                Hero hero = await _marvelService.FindHeroById(int.Parse(heroId));
+                return View(hero);
+            }
+            catch (Exception e)
+            {
+                ViewBag.ErrorMessage = e.Message;
+                return View();
+            }
         }
     }
 }

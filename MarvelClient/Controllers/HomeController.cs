@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,11 @@ namespace MarvelClient.Controllers
 {
     public class HomeController : Controller
     {
-        public HomeController()
+        private readonly IStringLocalizer _stringLocalizer;
+
+        public HomeController(IStringLocalizer<HomeController> stringLocalizer)
         {
+            _stringLocalizer = stringLocalizer;
         }
 
         public IActionResult Index()

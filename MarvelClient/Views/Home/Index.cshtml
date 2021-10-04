@@ -1,7 +1,6 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@using System.Globalization
+@inject IStringLocalizer<Resource> Loc
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="display-4">@Loc["LABEL_WELCOME"]</h1>
 </div>

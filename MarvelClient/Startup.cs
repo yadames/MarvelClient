@@ -29,6 +29,7 @@ namespace MarvelClient
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddLocalization();
+            services.AddMvc().AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
 
             services.AddControllersWithViews();
             services.AddRefitClient<IMarvelApi>().ConfigureHttpClient(c => c.BaseAddress = new Uri(Constant.URL_API));
@@ -55,6 +56,13 @@ namespace MarvelClient
             app.UseRouting();
 
             app.UseAuthorization();
+
+            var supportedCultures = new[] { "es", "en" };
+            var localizationObtions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+
+            app.UseRequestLocalization(localizationObtions);
 
             app.UseEndpoints(endpoints =>
             {
